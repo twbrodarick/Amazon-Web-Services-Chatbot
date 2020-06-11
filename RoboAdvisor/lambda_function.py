@@ -46,8 +46,74 @@ def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message)
         },
     }
 
+def validate_data(age, investment_amount, intent_request):
+        # Validate the retirement age based on the user's current age.
+        # An retirement age of 65 years is considered by default.
+    
+    if age is not None:
+        age = parse_int(age) 
+        if age <= 0 or age >= 65:
+                return build_validation_result(
+                    False,
+                    "age",
+                    "This service is available for investors with a valid age less than 65. Please provide an age between 0-65.",
+                )
+            
+
+        # Validate the investment amount, it should be >= 5000
+    if investment_amount is not None:
+        investment_amount = parse_int(investment_amount)
+        if investment_amount < 5000:
+                return build_validation_result(
+                    False,
+                    "investmentAmount",
+                    "The minimum investment amount is $5,000. Could you please provide a greater investment amount?",
+                )
+
+    return build_validation_result(True, None, None)
+            ### YOUR DATA VALIDATION CODE ENDS HERE ###
+
 ### Intents Handlers ###
-def recommend_portfolio(age, investment_amount, intent_request):
+def delegate(session_attributes, slots):
+    """
+    Defines a delegate slot type response.
+    """
+
+    return {
+        "sessionAttributes": session_attributes,
+        "dialogAction": {"type": "Delegate", "slots": slots},
+    }
+
+
+def close(session_attributes, fulfillment_state, message):
+    """
+    Defines a close slot type response.
+    """
+
+    response = {
+        "sessionAttributes": session_attributes,
+        "dialogAction": {
+            "type": "Close",
+            "fulfillmentState": fulfillment_state,
+            "message": message,
+        },
+    }
+
+    return response
+def get_initial_recommendation(risk_level):
+    
+    risk_levels = {
+        "None": "100% bonds (AGG), 0% equities (SPY)",
+        "Very Low": "80% bonds (AGG), 20% equities (SPY)",
+        "Low": "60% bonds (AGG), 40% equities (SPY)",
+        "Medium": "40% bonds (AGG), 60% equities (SPY)",
+        "High": "20% bonds (AGG), 80% equities (SPY)",
+        "Very High": "0% bonds (AGG), 100% equities (SPY)",
+    }
+
+    return risk_levels[risk_level]
+
+def recommend_portfolio(intent_request):
     """
     Performs dialog management and fulfillment for recommending a portfolio.
     """
@@ -86,76 +152,11 @@ def recommend_portfolio(age, investment_amount, intent_request):
 
         return delegate(output_session_attributes, get_slots(intent_request))
 
-        ### YOUR DATA VALIDATION CODE STARTS HERE ###
    
-    def validate_data(age, investment_amount, intent_request):
-    # Validate the retirement age based on the user's current age.
-    # An retirement age of 65 years is considered by default.
-    
-        if age is not None:
-            age = parse_int(age) 
-            if age <= 0 or age >= 65:
-                    return build_validation_result(
-                        False,
-                        "age",
-                        "This service is available for investors with a valid age less than 65. Please provide an age between 0-65.",
-                )
-            
-
-    # Validate the investment amount, it should be >= 5000
-        if investment_amount is not None:
-            investment_amount = parse_int(investment_amount)
-            if investment_amount < 5000:
-                    return build_validation_result(
-                        False,
-                        "investmentAmount",
-                        "The minimum investment amount is $5,000. Could you please provide a greater investment amount?",
-                    )
-
-        return build_validation_result(True, None, None)
-            ### YOUR DATA VALIDATION CODE ENDS HERE ###
-
-
-def delegate(session_attributes, slots):
-    """
-    Defines a delegate slot type response.
-    """
-
-    return {
-        "sessionAttributes": session_attributes,
-        "dialogAction": {"type": "Delegate", "slots": slots},
-    }
-
-
-def close(session_attributes, fulfillment_state, message):
-    """
-    Defines a close slot type response.
-    """
-
-    response = {
-        "sessionAttributes": session_attributes,
-        "dialogAction": {
-            "type": "Close",
-            "fulfillmentState": fulfillment_state,
-            "message": message,
-        },
-    }
-
-    return response
-
     ### YOUR FINAL INVESTMENT RECOMMENDATION CODE STARTS HERE ###
-def initial_recommendation(risk_level):
+    initial_recommendation = get_initial_recommendation(risk_level)
     
-    risk_levels = {
-        "None": "100% bonds (AGG), 0% equities (SPY)",
-        "Very Low": "80% bonds (AGG), 20% equities (SPY)",
-        "Low": "60% bonds (AGG), 40% equities (SPY)",
-        "Medium": "40% bonds (AGG), 60% equities (SPY)",
-        "High": "20% bonds (AGG), 80% equities (SPY)",
-        "Very High": "0% bonds (AGG), 100% equities (SPY)",
-    }
-
-    return risk_level
+    
     ### YOUR FINAL INVESTMENT RECOMMENDATION CODE ENDS HERE ###
 
     # Return a message with the initial recommendation based on the risk level.
@@ -167,7 +168,7 @@ def initial_recommendation(risk_level):
             "content": """{} Thank you for your information;
             based on the risk level you defined, my recommendation is to choose an investment portfolio with {}
             """.format(
-                first_name, risk_level
+                first_name, initial_recommendation
             ),
         },
     )
@@ -183,7 +184,7 @@ def dispatch(intent_request):
 
     # Dispatch to bot's intent handlers
     if intent_name == "RecommendPortfolio":
-        return initial_recommendation(intent_request)
+        return recommend_portfolio(intent_request)
 
     raise Exception("Intent with name " + intent_name + " not supported")
 
