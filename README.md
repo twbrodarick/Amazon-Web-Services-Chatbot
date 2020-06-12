@@ -51,11 +51,11 @@ The response cards for the `riskLevel` slot are:
 
 | Card 1                              | Card 2                              |
 | ----------------------------------- | ----------------------------------- |
-| ![Card 1 sample](Images/card1.png)  | ![Card 2 sample](Images/card2.png)  |
+| None                                | Very Low / Low                      |
 
 | Card 3                              | Card 4                              |
 | ----------------------------------- | ----------------------------------- |
-| ![Card 3 sample](Images/card3.png)  | ![Card 4 sample](Images/card4.png)  |
+| Medium                              | High / Very High                    |
 
 ### RecommendPortfolio Intent - Confirmation Prompts
 
