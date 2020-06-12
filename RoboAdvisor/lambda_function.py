@@ -165,8 +165,8 @@ def recommend_portfolio(intent_request):
         "Fulfilled",
         {
             "contentType": "PlainText",
-            "content": """{} Thank you for your information;
-            based on the risk level you defined, my recommendation is to choose an investment portfolio with {}
+            "content": """Thank you for your information, {}.
+            Based on the risk level you defined, my recommendation is to choose an investment portfolio with {}
             """.format(
                 first_name, initial_recommendation
             ),
