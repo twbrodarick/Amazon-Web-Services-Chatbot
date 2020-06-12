@@ -87,7 +87,9 @@ Once the intent is fulfilled, the bot will produce an investment recommendation 
 
 ### RoboAdvisor Files
 
-* ZIP file of RoboAdvisor bot via Amazon Lex platform:
+* ZIP file of RoboAdvisor bot via Amazon Lex platform
+* lambda_function.py (Lambda code)
+* Bot Demo video
 * Text files of 4 error tests used to configure 'recommendPortfolio' lambda function correctly
-* lambda_function.py
-* Bot Demo video 
+* PNG files of 4 portfolio recommendations used on response cards
+
