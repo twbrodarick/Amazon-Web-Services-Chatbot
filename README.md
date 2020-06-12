@@ -40,7 +40,7 @@
 | age              | AMAZON.NUMBER        | How old are you?                                                          |
 | investmentAmount | AMAZON.NUMBER        | How much do you want to invest?                                           |
 
-The `riskLevel` custom slot is used to retrieve the risk level the user is willing to take on the investment portfolio; create this custom slot as follows:
+The `riskLevel` custom slot is used to retrieve the risk level the user is willing to take on the investment portfolio as follows:
 
 * **Name:** riskLevel
 * **Prompt:** What level of investment risk would you like to take?
@@ -63,7 +63,7 @@ The response cards for the `riskLevel` slot are:
 * **Cancel:** I will be pleased to assist you in the future.
 
 
-### Lambda Functions
+### Lambda Function
 
 * Lambda and Test Events were created to achieve the following:
 
@@ -71,7 +71,7 @@ The response cards for the `riskLevel` slot are:
 
 * User `age` should be greater than zero and less than 65.
 * the `investment_amount` should be equal to or greater than USD 5,000.
-* Violations of these parameters will prompt to the user to input valid responses.
+* Violations of these parameters will prompt the user to input valid responses.
 
 ##### Investment Portfolio Recommendation
 
